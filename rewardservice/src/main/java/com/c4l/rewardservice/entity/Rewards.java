@@ -7,9 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Document
 @Data
+
 public class Rewards {
 
 	
@@ -21,6 +23,15 @@ public class Rewards {
 	private String binNo;
 	private boolean isPrimary;
 	private BigDecimal  amount;
+	
+	
+	@Override
+	public String toString() {
+		return "Rewards [createdOn=" + createdOn + ", pseudoCard=" + "********" + ", cardType=" + cardType + ", cifid="
+				+ "****" + ", tranAmount=" + tranAmount + ", binNo=" + "****" + ", isPrimary=" + isPrimary + ", amount="
+				+ amount + "]";
+	}
 
+	
 	
 }

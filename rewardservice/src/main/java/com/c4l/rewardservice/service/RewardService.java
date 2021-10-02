@@ -5,5 +5,5 @@ import com.c4l.rewardservice.model.Reward;
 
 public interface RewardService {
 
-	Rewards processRewards(Reward reward);	
+	void processRewards(Reward reward);	
 }

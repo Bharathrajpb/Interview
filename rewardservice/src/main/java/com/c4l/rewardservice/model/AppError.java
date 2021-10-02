@@ -27,4 +27,11 @@ public class AppError {
 		this.message = message;
 	}
 	
+	@Override
+	public String toString() {
+		return "AppError [code=" + code + ", message=" + message + "]";
+	}
+	
+	
+	
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
-
+	
 @Document
 @Data
 public class RewardsFailedReport {
@@ -20,5 +20,15 @@ public class RewardsFailedReport {
 	private boolean isPrimary;
 	private BigDecimal  amount;	
 	private String desc;
+	
+	
+	@Override
+	public String toString() {
+		return "RewardsFailedReport [createdOn=" + createdOn + ", pseudoCard=" + "****" + ", cardType=" + cardType
+				+ ", cifid=" + "***" + ", tranAmount=" + tranAmount + ", binNo=" + "****" + ", isPrimary=" + isPrimary
+				+ ", amount=" + amount + ", desc=" + desc + "]";
+	}
+	
+	
 	
 }

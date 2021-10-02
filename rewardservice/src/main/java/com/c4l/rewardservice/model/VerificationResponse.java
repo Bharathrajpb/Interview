@@ -30,4 +30,13 @@ public class VerificationResponse {
 		VERIFICATION_PASSED,
 		VERIFICATION_FAILED
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "VerificationResponse [pseudoCard=" + pseudoCard + ", status=" + status + "]";
+	}
+	
+	
 }

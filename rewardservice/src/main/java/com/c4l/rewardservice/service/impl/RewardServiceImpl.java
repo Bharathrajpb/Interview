@@ -18,9 +18,12 @@ import com.c4l.rewardservice.repository.RewardRepository;
 import com.c4l.rewardservice.repository.RewardsFailedReportRepository;
 import com.c4l.rewardservice.service.RewardService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 
 @Service
+@Slf4j
 public class RewardServiceImpl implements RewardService {
 
 	@Autowired
@@ -33,27 +36,30 @@ public class RewardServiceImpl implements RewardService {
     private RewardsFailedReportRepository rewardFailureRepository;
 	
 	@Override
-	public Rewards processRewards(Reward reward) {
-
+	public void processRewards(Reward reward) {
+		 log.info("Entered into processRewards,Processing : {}",reward.toString());
 		// check for valid credit card
 		VerificationResponse verficationResponse = cardServiceProxy.checkCard(reward.getPseudoCard()).getBody();
 		if (!VerificationResponse.Status.VERIFICATION_PASSED
 				.equals(verficationResponse.status)) {
-			
+			 log.info("Card Not found -->"+reward.getPseudoCard());
 			RewardsFailedReport rewardFailRep =prepareInputDataForFailure(reward);
 			
 			/* dumping the failed responses to RewardsFailedReport for tracking purpose. */
-		
+			 log.info("Inserting into Reward failed Report Table for{} ",rewardFailRep.toString());
 			rewardFailureRepository.save(rewardFailRep);
-			
+			 log.info("After Data insertion CardNo {} Amount {}",reward.getPseudoCard(),reward.getAmount());
+
 			//Exception if card not found
-			throw new CardMissMatchException(NOCARD_FOUND_CODE,NOCARD_FOUND_DESC,HttpStatus.NOT_FOUND.value());
+			//throw new CardMissMatchException(NOCARD_FOUND_CODE,NOCARD_FOUND_DESC,HttpStatus.NOT_FOUND.value());
+			return;
 		}
 		// insert into DB
 		// replace code with Map struct to replace pojos
 		Rewards rew =prepareInputDataForRewards(reward);
+		 log.info("Saving rewards to DB for PseudoCard----> {}  Amount-->{} "+reward.getPseudoCard(),reward.getAmount());
 		rewardRepository.save(rew);
-		return rew;
+		
 	}
 	
 	private Rewards prepareInputDataForRewards(Reward reward) {
@@ -72,13 +78,13 @@ public class RewardServiceImpl implements RewardService {
 	
 	private RewardsFailedReport prepareInputDataForFailure(Reward reward) {
 		RewardsFailedReport rewardFailRep = new RewardsFailedReport();
-		rewardFailRep.setAmount(rewardFailRep.getAmount());
-		rewardFailRep.setBinNo(rewardFailRep.getBinNo());
-		rewardFailRep.setCardType(rewardFailRep.getCardType());
-		rewardFailRep.setCifid(rewardFailRep.getCifid());
-		rewardFailRep.setPrimary(rewardFailRep.isPrimary());
-		rewardFailRep.setPseudoCard(rewardFailRep.getPseudoCard());
-		rewardFailRep.setTranAmount(rewardFailRep.getTranAmount());
+		rewardFailRep.setAmount(reward.getAmount());
+		rewardFailRep.setBinNo(reward.getBinNo());
+		rewardFailRep.setCardType(reward.getCardType());
+		rewardFailRep.setCifid(reward.getCifid());
+		rewardFailRep.setPrimary(reward.isPrimary());
+		rewardFailRep.setPseudoCard(reward.getPseudoCard());
+		rewardFailRep.setTranAmount(reward.getTranAmount());
 		rewardFailRep.setDesc(ApplicationConstant.PSEUDOCARD_FAILURE_DESC);
 		return rewardFailRep;
  

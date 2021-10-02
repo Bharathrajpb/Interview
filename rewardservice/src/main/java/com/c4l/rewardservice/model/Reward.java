@@ -18,5 +18,14 @@ public class Reward implements Serializable{
 	 private String binNo;
 	 private boolean isPrimary;
 	 private BigDecimal  amount;
+	
+	 
+	 @Override
+	public String toString() {
+		return "Reward [pseudoCard=" + "***" + ", cardType=" + cardType + ", cifid=" + "***" + ", tranAmount="
+				+ tranAmount + ", binNo=" + "****" + ", isPrimary=" + isPrimary + ", amount=" + amount + "]";
+	}
+	 
+	 
 	 
 }
