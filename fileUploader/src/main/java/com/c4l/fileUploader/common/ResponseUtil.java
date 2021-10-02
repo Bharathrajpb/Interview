@@ -1,9 +1,7 @@
-package com.c4l.rewardservice.common;
+package com.c4l.fileUploader.common;
 
-import static com.c4l.rewardservice.common.ApplicationConstant.GENERIC_RESPONSE_CODE;
-import static com.c4l.rewardservice.common.ApplicationConstant.GENERIC_RESPONSE_DESC;
-import static com.c4l.rewardservice.common.ApplicationConstant.HEADER_PARAM_LOCATION;
-import static com.c4l.rewardservice.common.ApplicationConstant.HEADER_PARAM_RESPONSE_TIME;
+import static com.c4l.fileUploader.common.ApplicationConstant.*;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.c4l.rewardservice.model.GenericResponse;
+import com.c4l.fileUploader.model.GenericResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

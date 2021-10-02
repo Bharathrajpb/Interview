@@ -3,6 +3,7 @@ package com.c4l.rewardservice.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -11,23 +12,24 @@ import lombok.Data;
 @Data
 public class RewardsFailedReport {
 
+	@Id
+	private String id;
 	private Date createdOn=new Date();
-	private String pseudoCard;
-	private String cardType;
-	private String cifid;
-	private String tranAmount;
-	private String binNo;
-	private boolean isPrimary;
-	private BigDecimal  amount;	
+	private String record;
 	private String desc;
 	
 	
 	@Override
 	public String toString() {
-		return "RewardsFailedReport [createdOn=" + createdOn + ", pseudoCard=" + "****" + ", cardType=" + cardType
-				+ ", cifid=" + "***" + ", tranAmount=" + tranAmount + ", binNo=" + "****" + ", isPrimary=" + isPrimary
-				+ ", amount=" + amount + ", desc=" + desc + "]";
+		return "RewardsFailedReport [createdOn=" + createdOn + ", record=" + record + ", desc=" + desc + "]";
 	}
+	
+	/*
+	 * private String cardType; private String cifid; private String tranAmount;
+	 * private String binNo; private boolean isPrimary; private BigDecimal amount;
+	 */
+	
+	
 	
 	
 	

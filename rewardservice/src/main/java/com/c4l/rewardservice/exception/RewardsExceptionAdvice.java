@@ -10,11 +10,12 @@ import com.c4l.rewardservice.model.AppError;
 @ControllerAdvice
 public class RewardsExceptionAdvice {
 
-	@ExceptionHandler(CardMissMatchException.class)
-	public ResponseEntity<AppError> handleApplicationException(CardMissMatchException ex) {
-		return new ResponseEntity<>(new AppError(ex.getErrorCode(), ex.getErrorMessage()),
-				HttpStatus.valueOf(ex.getStatusCode()));
-	}
+	/*Removed from advice as the exception needs to be handled
+	 * @ExceptionHandler(CardMissMatchException.class) public
+	 * ResponseEntity<AppError> handleApplicationException(CardMissMatchException
+	 * ex) { return new ResponseEntity<>(new AppError(ex.getErrorCode(),
+	 * ex.getErrorMessage()), HttpStatus.valueOf(ex.getStatusCode())); }
+	 */
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<AppError> handleApplicationException(Exception ex) {

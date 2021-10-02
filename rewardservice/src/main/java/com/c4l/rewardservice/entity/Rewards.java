@@ -14,7 +14,8 @@ import lombok.ToString;
 
 public class Rewards {
 
-	
+	@Id
+	private String id;
 	private Date createdOn=new Date();
 	private String pseudoCard;
 	private String cardType;
