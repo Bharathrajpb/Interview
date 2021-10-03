@@ -1,0 +1,44 @@
+Project Introduction:
+
+Rewad stash aims at maintaing rewards points earened by all the card holder in centralized database.Authorized client will upload the files with rewards information of the customers for that day.These file will be processed by Streaming API and inserted into Mongo DB.
+
+The application in developed in Spring boot 2.5.5
+
+This project consist of six micro service.
+1.ApiGateway (Spring cloud Gateway): Entry point for the application
+2.springcloudConfig (Spring cloud config Server):For central config Management
+3.namingServer(Eureka Naming Server): For service Discovery
+4.FileuploderServce :To upload the file ,this in turn call Rewards service to insert the data into DB
+5.RewardService : This service check wheather the card is valid or not and insert into DB 
+6.CreditCardservice :This service will check the card against the CreditCard Collection.
+
+Flow:
+
+1.Client will hit the Post service of FileuploderService by uploading the file as multipart form data.
+2.The request will go to apiGateway ,then it will redirect the request Fileupload service by looking into Eureka naming server based on the application name metioned in url.
+3.Once the request is recived by the FileuploadService controller ,this will perform some basic validation ,Apache commons-io Streaming api will open the input stream ,i am chuncking the data in the multiples of MAX_CHUNK_SIZE(1000) and calling @Async batchProcessRecords(List<String> rewardRecordList)  which is in @Service,this inturn delgate the request to RewardServe via Feign client.
+4.This process will done @asyncronosy until the complete file is read with storing the file.Once the file is read we are sending Http Status 202-ACCEPTED.
+5.Once the rewardsService Controller recivers the batchRecords this will delgate the batchrecord request another @Async Service processBatchRewards(List<String> rewardRecordList).This read the list one by one and parse the record which is in String into Rewards Pojo and delegate the request to processRewards(Reward) Service using Parallel Stream .
+6.Process rewards will Process each rewards and check wheather the credit card is valid by calling CreditCardService via Feign client.if the card is valid data will inserted into Rewads collection.
+7.If the card is invalid or any Exception or validation failure ,the Data will inserted into RewardsFailureReport Collection as backup.
+
+Tools Used:
+1.MongoDB--> storing the data
+2.HasiCorp Vault-->to store the protected credentails
+3.Zipkin --> for distributed tracing 
+4.RabbitMq -->to fetch the tracing details  from application to Zipkin
+5.Git--> repository
+6.Maven-->building
+
+Important Libraries
+1.spring cloud sleuth--> for log tracing
+2.Eureka Server and Client -->Service Regestory and Discovery
+3.Spring Cloud Gateway--> As Gateway server
+4.Spring Cloud config -->to centralize configurations
+5.apache commons io for Streaming service
+
+Assumptions :
+
+1.Max size of file will be 1GB-1.5GB
+2.Hashed credit card will be their in File as well as database
+3.All the details of the rewards will in a single line of the file,All the feilds are important so nothing will be missed.
