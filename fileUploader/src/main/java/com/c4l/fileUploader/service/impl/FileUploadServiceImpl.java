@@ -23,6 +23,7 @@ public class FileUploadServiceImpl implements  FileUploadService{
 	public void batchProcessRecords(List<String> rewardRecordList) {
 		log.info("Async file execution batchProcessRecords started by thread {}",Thread.currentThread().getName());
 		//call reward service batch insert client to process the client
+		if(null!=rewardRecordList&&!rewardRecordList.isEmpty())
 		rewardServiceClient.processBulkrewards(rewardRecordList);
 		log.info("batchProcessRecords execution completed by thread {}",Thread.currentThread().getName());
 

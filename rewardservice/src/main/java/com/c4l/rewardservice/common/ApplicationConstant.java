@@ -6,6 +6,7 @@ public interface ApplicationConstant {
 	String NOCARD_FOUND_CODE="001";
 	String GENERIC_ERROR_CODE="5000";
 	String NOCARD_FOUND_DESC="Card NOt found in Database";
+	String FILED_VALIDATION_FAIL_DESC="Card NOt found in Database";
 	String TECH_ERROR="Technical Error while processing";
 	String HEADER_PARAM_RESPONSE_TIME="response-time";
 	String HEADER_PARAM_LOCATION ="LOCATION";

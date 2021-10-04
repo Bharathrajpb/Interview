@@ -19,7 +19,7 @@ public class ObjectMapperUtil {
 		rew.setCifid(reward.getCifid());
 		rew.setPrimary(reward.isPrimary());
 		rew.setPseudoCard(reward.getPseudoCard());
-		rew.setTranAmount(reward.getTranAmount());
+		rew.setPonits(reward.getPonits());
 		return rew;
 
 	}
@@ -41,7 +41,7 @@ public class ObjectMapperUtil {
 		rew.setCifid(recordArray[3]);
 		rew.setAmount((ResponseUtil.isNullOrEmpty(recordArray[4])) ? BigDecimal.ZERO : new BigDecimal(recordArray[4]));
 		rew.setPrimary((ResponseUtil.isNullOrEmpty(recordArray[5])) ? false : Boolean.getBoolean(recordArray[5]));
-		rew.setTranAmount(recordArray[6]);
+		rew.setPonits(recordArray[6]);
 		log.info("Converted Pojo" + rew.toString());
 		return rew;
 	}

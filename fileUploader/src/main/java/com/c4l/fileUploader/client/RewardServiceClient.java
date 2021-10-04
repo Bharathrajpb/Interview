@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.c4l.fileUploader.model.GenericResponse;
 
 
-@RequestMapping("/rewards")
+@RequestMapping("V1/rewards")
 @FeignClient(name="rewardservice")
 public interface RewardServiceClient {
 

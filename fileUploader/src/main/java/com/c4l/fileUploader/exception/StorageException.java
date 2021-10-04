@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import lombok.Getter;
 
 @Getter
-public class CardMissMatchException extends RuntimeException{
+public class StorageException extends RuntimeException{
 
 	private static final long serialVersionUIDAdder =1L;
 	
@@ -16,7 +16,7 @@ public class CardMissMatchException extends RuntimeException{
 	private int statusCode=HttpStatus.BAD_REQUEST.value();
 
 	
-	public CardMissMatchException(String errorType, String errorCode, String errorMessage, String responseBody,
+	public StorageException(String errorType, String errorCode, String errorMessage, String responseBody,
 			int statusCode) {
 		super();
 		this.errorType = errorType;
@@ -26,7 +26,7 @@ public class CardMissMatchException extends RuntimeException{
 		this.statusCode = statusCode;
 	}
 	
-	public CardMissMatchException(String errorCode, String errorMessage,int statusCode) {
+	public StorageException(String errorCode, String errorMessage,int statusCode) {
 		super();
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
@@ -34,7 +34,7 @@ public class CardMissMatchException extends RuntimeException{
 		this.errorType=null;
 	}
 	
-	public CardMissMatchException(String errorCode, String errorMessage) {
+	public StorageException(String errorCode, String errorMessage) {
 		super(errorMessage);
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;

@@ -1,8 +1,15 @@
 package com.c4l.rewardservice.service.impl;
 
-import static com.c4l.rewardservice.common.ApplicationConstant.*;
+import static com.c4l.rewardservice.common.ApplicationConstant.NOCARD_FOUND_CODE;
+import static com.c4l.rewardservice.common.ApplicationConstant.NOCARD_FOUND_DESC;
+import static com.c4l.rewardservice.common.ApplicationConstant.TECH_ERROR;
 
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,10 +41,24 @@ public class RewardServiceImpl implements RewardService {
 
 	@Autowired
 	private RewardsFailedReportRepository rewardFailureRepository;
+	
+	@Autowired
+	private Validator validator;
 
 	@Override
 	public void processRewards(Reward reward) {
 		log.info("Entered into processRewards,Processing : {}", reward.toString());
+		
+		 Set<ConstraintViolation<Reward>> violations = validator.validate(reward);
+		
+		 if (!violations.isEmpty()) {
+	            StringBuilder sb = new StringBuilder();
+	            for (ConstraintViolation<Reward> constraintViolation : violations) {
+	                sb.append(constraintViolation.getMessage());
+	            }
+	            throw new ConstraintViolationException("ConstraintViolationException for feilds: " + sb.toString(), violations);
+	        }
+		
 		// check for valid credit card
 		VerificationResponse verficationResponse = cardServiceProxy.checkCard(reward.getPseudoCard()).getBody();
 		if (!VerificationResponse.Status.VERIFICATION_PASSED.equals(verficationResponse.status)) {
@@ -68,7 +89,16 @@ public class RewardServiceImpl implements RewardService {
 				/* dumping the failed responses to RewardsFailedReport for tracking purpose. */
 				log.info("Inserting into Reward failed Report Table for{} ", rewardFailRep.toString());
 				rewardFailureRepository.save(rewardFailRep);
-			} catch (Exception ex) {
+			} 
+			catch (ConstraintViolationException ex) {
+				RewardsFailedReport rewardFailRep = ObjectMapperUtil.prepareInputDataForFailure(record,
+						NOCARD_FOUND_DESC);
+				/* dumping the failed responses to RewardsFailedReport for tracking purpose. */
+				log.info("ConstraintViolationException : {}",ex.getMessage());
+				log.info("Inserting into Reward failed Report Table for{}", rewardFailRep.toString());
+				rewardFailureRepository.save(rewardFailRep);
+			}
+			catch (Exception ex) {
 				RewardsFailedReport rewardFailRep = ObjectMapperUtil.prepareInputDataForFailure(record, TECH_ERROR);
 				/* dumping the failed responses also logging the Exception. */
 				log.info("Inserting into Reward failed Report Table for{} ", rewardFailRep.toString());

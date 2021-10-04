@@ -20,7 +20,7 @@ public class Rewards {
 	private String pseudoCard;
 	private String cardType;
 	private String cifid;
-	private String tranAmount;
+	private String ponits;
 	private String binNo;
 	private boolean isPrimary;
 	private BigDecimal  amount;
@@ -29,7 +29,7 @@ public class Rewards {
 	@Override
 	public String toString() {
 		return "Rewards [createdOn=" + createdOn + ", pseudoCard=" + "********" + ", cardType=" + cardType + ", cifid="
-				+ "****" + ", tranAmount=" + tranAmount + ", binNo=" + "****" + ", isPrimary=" + isPrimary + ", amount="
+				+ "****" + ", tranAmount=" + ponits + ", binNo=" + "****" + ", isPrimary=" + isPrimary + ", amount="
 				+ amount + "]";
 	}
 

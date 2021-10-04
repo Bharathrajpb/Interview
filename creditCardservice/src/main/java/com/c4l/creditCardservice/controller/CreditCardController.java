@@ -14,7 +14,7 @@ import com.c4l.creditCardservice.service.CreditCardService;
 import lombok.extern.slf4j.Slf4j;
 
 
-@RequestMapping("/creditCard")
+@RequestMapping("V1/creditCard")
 @RestController
 @Slf4j
 public class CreditCardController {

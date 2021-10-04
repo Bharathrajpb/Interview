@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.c4l.rewardservice.model.VerificationResponse;
-@RequestMapping("/creditCard")
+@RequestMapping("V1/creditCard")
 @FeignClient(name="creditCardservice")
 public interface CreditCardServiceClient {
 
