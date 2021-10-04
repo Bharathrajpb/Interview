@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.c4l.fileUploader.common.ResponseUtil;
 import com.c4l.fileUploader.exception.StorageException;
 import com.c4l.fileUploader.model.GenericResponse;
+import com.c4l.fileUploader.service.FileStreamingService;
 import com.c4l.fileUploader.service.FileUploadService;
 import com.c4l.fileUploader.validation.ValidFile;
 
@@ -35,36 +36,17 @@ import lombok.extern.slf4j.Slf4j;
 
 public class FileUplodController {
 
-	private static int MAX_CHUNK_SIZE = 1000;
-
 	@Autowired
-	private FileUploadService fileUploadService;
+	private FileStreamingService fileStreamingService;
 	
 	@Validated
 	@PostMapping
 	public ResponseEntity<GenericResponse> uploadFile(@ValidFile @RequestParam("file") MultipartFile file) throws IOException {
-		long count = 1;
 		if (file.isEmpty()) {
 			log.error("uploadFile ::File is empty for the request");
 			throw new StorageException(EMPTY_FILE_ERROR_CODE, EMPTY_FILE_ERROR_DESC, HttpStatus.BAD_REQUEST.value());
 		}
-		InputStream inputStream = file.getInputStream();
-		LineIterator it = IOUtils.lineIterator(inputStream, StandardCharsets.UTF_8.toString());
-		List<String> listRewards = new ArrayList<String>();
-		while (it.hasNext()) {
-			String line = it.nextLine();
-			listRewards.add(line);
-			if (count % MAX_CHUNK_SIZE == 0) {
-				fileUploadService.batchProcessRecords(List.copyOf(listRewards));
-				listRewards.clear();
-			}
-			count++;
-		}
-		log.error("uploadFile ::All lines read came out,{} record pending for verification", listRewards.size());
-		if (!listRewards.isEmpty()) {
-			fileUploadService.batchProcessRecords(List.copyOf(listRewards));
-			listRewards.clear();
-		}
+		fileStreamingService.processUploadedFile(file);
 		log.error("uploadFile ::Completed Processing file Stream");
 		return ResponseUtil.response202(ResponseUtil.createGenericResponse());
 	}
