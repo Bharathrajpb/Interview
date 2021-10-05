@@ -4,13 +4,7 @@ import static com.c4l.fileUploader.common.ApplicationConstant.EMPTY_FILE_ERROR_C
 import static com.c4l.fileUploader.common.ApplicationConstant.EMPTY_FILE_ERROR_DESC;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +19,10 @@ import com.c4l.fileUploader.common.ResponseUtil;
 import com.c4l.fileUploader.exception.StorageException;
 import com.c4l.fileUploader.model.GenericResponse;
 import com.c4l.fileUploader.service.FileStreamingService;
-import com.c4l.fileUploader.service.FileUploadService;
 import com.c4l.fileUploader.validation.ValidFile;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -39,6 +34,8 @@ public class FileUplodController {
 	@Autowired
 	private FileStreamingService fileStreamingService;
 	
+	@Bulkhead(name="uploadFile")
+	@RateLimiter(name="uploadFile")
 	@Validated
 	@PostMapping
 	public ResponseEntity<GenericResponse> uploadFile(@ValidFile @RequestParam("file") MultipartFile file) throws IOException {

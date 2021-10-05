@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.c4l.fileUploader.client.RewardServiceClient;
 import com.c4l.fileUploader.service.FileUploadService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -18,7 +20,8 @@ public class FileUploadServiceImpl implements  FileUploadService{
 	@Autowired
 	private RewardServiceClient rewardServiceClient;
 	
-	
+	@CircuitBreaker(name = "batchProcess")
+	@Retry(name = "batchProcess")
 	@Async("fileUploadExecutor")
 	public void batchProcessRecords(List<String> rewardRecordList) {
 		log.info("Async file execution batchProcessRecords started by thread {}",Thread.currentThread().getName());

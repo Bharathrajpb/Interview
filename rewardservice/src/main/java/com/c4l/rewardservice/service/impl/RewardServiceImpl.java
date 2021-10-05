@@ -27,6 +27,8 @@ import com.c4l.rewardservice.repository.RewardRepository;
 import com.c4l.rewardservice.repository.RewardsFailedReportRepository;
 import com.c4l.rewardservice.service.RewardService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -44,7 +46,9 @@ public class RewardServiceImpl implements RewardService {
 	
 	@Autowired
 	private Validator validator;
-
+	
+	@CircuitBreaker(name = "rewardService")
+	@Retry(name = "rewardService")
 	@Override
 	public void processRewards(Reward reward) {
 		log.info("Entered into processRewards,Processing : {}", reward.toString());
@@ -76,6 +80,7 @@ public class RewardServiceImpl implements RewardService {
 
 	}
 
+	
 	@Async("rewardServiceExecutor")
 	public void processBatchRewards(List<String> rewardsList) {
 		log.info("Entered processBatchRewards Async Executor ,Thread {}" , Thread.currentThread().getName());
