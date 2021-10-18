@@ -44,7 +44,7 @@ public class FileStreamingServiceImpl implements FileStreamingService{
 			}
 			count++;
 		}
-		log.error("uploadFile ::All lines read came out,{} record pending for verification", listRewards.size());
+		log.info("uploadFile ::All lines read came out,{} record pending for verification", listRewards.size());
 		if (!listRewards.isEmpty()) {
 			fileUploadService.batchProcessRecords(List.copyOf(listRewards));
 			listRewards.clear();

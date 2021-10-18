@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("V1/upload")
 @Slf4j
-
 public class FileUplodController {
 
 	@Autowired
